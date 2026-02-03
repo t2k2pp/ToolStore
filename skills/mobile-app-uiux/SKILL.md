@@ -105,6 +105,154 @@ NavigationDrawer(  // Desktop
 )
 ```
 
+---
+
+## Apple Human Interface Guidelines (HIG)
+
+### iOS固有デザイン原則
+
+| 原則 | 内容 |
+|------|------|
+| 明確性 | テキスト読みやすく、アイコン明確 |
+| 敬意 | コンテンツが主役、UIは控えめ |
+| 深度 | レイヤーとモーションで空間表現 |
+
+### iOSらしいナビゲーション
+
+```dart
+// Cupertinoウィジェット使用（iOS風）
+CupertinoPageScaffold(
+  navigationBar: const CupertinoNavigationBar(
+    middle: Text('タイトル'),
+    // iOS標準の戻るボタン自動表示
+  ),
+  child: SafeArea(
+    child: content,
+  ),
+)
+
+// プラットフォーム判定で切り替え
+Widget build(BuildContext context) {
+  if (Platform.isIOS) {
+    return CupertinoPageScaffold(...);
+  }
+  return Scaffold(...);  // Material Design
+}
+```
+
+### iOS標準コンポーネント
+
+```dart
+// アクションシート（iOS風）
+showCupertinoModalPopup(
+  context: context,
+  builder: (context) => CupertinoActionSheet(
+    title: const Text('オプションを選択'),
+    actions: [
+      CupertinoActionSheetAction(
+        onPressed: () {},
+        child: const Text('編集'),
+      ),
+      CupertinoActionSheetAction(
+        isDestructiveAction: true,
+        onPressed: () {},
+        child: const Text('削除'),
+      ),
+    ],
+    cancelButton: CupertinoActionSheetAction(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('キャンセル'),
+    ),
+  ),
+);
+
+// ピッカー（iOS風）
+CupertinoDatePicker(
+  mode: CupertinoDatePickerMode.date,
+  onDateTimeChanged: (DateTime date) {},
+)
+
+// スライダー
+CupertinoSlider(
+  value: _value,
+  onChanged: (v) => setState(() => _value = v),
+)
+
+// スイッチ
+CupertinoSwitch(
+  value: _enabled,
+  onChanged: (v) => setState(() => _enabled = v),
+)
+```
+
+### Safe Area（ノッチ/Dynamic Island対応）
+
+```dart
+// 必ずSafeAreaで囲む
+SafeArea(
+  // 各辺の余白を個別制御可能
+  top: true,
+  bottom: true,
+  left: true,
+  right: true,
+  child: Column(
+    children: [...],
+  ),
+)
+
+// BottomNavigationBar下の余白
+Padding(
+  padding: EdgeInsets.only(
+    bottom: MediaQuery.of(context).viewPadding.bottom,
+  ),
+  child: content,
+)
+```
+
+### iOS固有タッチ操作
+
+| 操作 | 用途 |
+|------|------|
+| 左エッジスワイプ | 戻る（標準動作） |
+| 下スワイプ | モーダル閉じる |
+| 長押し | コンテキストメニュー |
+
+```dart
+// エッジスワイプで戻る（デフォルト有効）
+CupertinoPageRoute(
+  builder: (_) => NextScreen(),
+  // fullscreenDialog: true でモーダル表示
+)
+
+// コンテキストメニュー
+CupertinoContextMenu(
+  actions: [
+    CupertinoContextMenuAction(
+      onPressed: () {},
+      trailingIcon: CupertinoIcons.share,
+      child: const Text('共有'),
+    ),
+  ],
+  child: Image.network(imageUrl),
+)
+```
+
+### SF Symbols（iOSネイティブアイコン）
+
+```dart
+// Cupertinoアイコン使用
+const Icon(CupertinoIcons.home)
+const Icon(CupertinoIcons.settings)
+const Icon(CupertinoIcons.person)
+
+// プラットフォーム別アイコン
+Icon(
+  Platform.isIOS ? CupertinoIcons.back : Icons.arrow_back,
+)
+```
+
+---
+
 ## アクセシビリティ
 
 ### 必須対応項目

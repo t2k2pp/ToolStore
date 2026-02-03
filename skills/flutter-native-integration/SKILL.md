@@ -219,6 +219,143 @@ class BatteryStreamHandler(private val context: Context) : EventChannel.StreamHa
 
 ---
 
+## iOS固有API連携
+
+### Sign in with Apple
+```yaml
+# pubspec.yaml
+dependencies:
+  sign_in_with_apple: ^5.0.0
+```
+
+```dart
+// Dart実装
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+Future<void> signInWithApple() async {
+  final credential = await SignInWithApple.getAppleIDCredential(
+    scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ],
+  );
+
+  // バックエンドに送信
+  await authRepository.signInWithApple(
+    identityToken: credential.identityToken!,
+    authorizationCode: credential.authorizationCode,
+  );
+}
+```
+
+**設定必須:**
+1. Xcode → Signing & Capabilities → + Sign in with Apple
+2. Apple Developer Portal → App ID → Sign in with Apple有効化
+3. プロビジョニングプロファイル再生成
+
+### HealthKit
+```yaml
+dependencies:
+  health: ^10.0.0
+```
+
+```dart
+import 'package:health/health.dart';
+
+class HealthService {
+  final _health = HealthFactory();
+
+  Future<bool> requestPermissions() async {
+    final types = [
+      HealthDataType.STEPS,
+      HealthDataType.HEART_RATE,
+      HealthDataType.SLEEP_IN_BED,
+    ];
+    return await _health.requestAuthorization(types);
+  }
+
+  Future<int> getStepsToday() async {
+    final now = DateTime.now();
+    final midnight = DateTime(now.year, now.month, now.day);
+    
+    final steps = await _health.getTotalStepsInInterval(midnight, now);
+    return steps ?? 0;
+  }
+}
+```
+
+**Info.plist必須:**
+```xml
+<key>NSHealthShareUsageDescription</key>
+<string>歩数データを表示するためにヘルスケアデータを読み取ります</string>
+<key>NSHealthUpdateUsageDescription</key>
+<string>ワークアウトデータを記録するためにヘルスケアに書き込みます</string>
+```
+
+### Push通知（APNs）
+```yaml
+dependencies:
+  firebase_messaging: ^14.7.0
+```
+
+```dart
+// APNsトークン取得
+final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+
+// FCMトークン（iOS/Android共通）
+final fcmToken = await FirebaseMessaging.instance.getToken();
+```
+
+**設定:**
+1. Xcode → Signing & Capabilities → Push Notifications
+2. Apple Developer → Keys → APNs Key作成
+3. Firebase Console → Project Settings → Cloud Messaging → APNs Key登録
+
+### App Clips
+```dart
+// App Clip Experience URL処理
+// ios/Runner (App Clip)/AppDelegate.swift
+func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    guard let url = userActivity.webpageURL else { return }
+    // URLパラメータを処理
+}
+```
+
+### Widget（iOS 14+ WidgetKit）
+```swift
+// ios/Widget/Widget.swift
+import WidgetKit
+import SwiftUI
+
+struct FlutterDataProvider: TimelineProvider {
+    // UserDefaultsでFlutterアプリとデータ共有
+    // App Groups必須
+}
+
+@main
+struct AppWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "widget", provider: FlutterDataProvider()) { entry in
+            WidgetView(entry: entry)
+        }
+        .configurationDisplayName("My Widget")
+        .supportedFamilies([.systemSmall, .systemMedium])
+    }
+}
+```
+
+**Flutterからデータ共有:**
+```dart
+// App Groupsでデータ共有
+import 'package:shared_preferences/shared_preferences.dart';
+
+// iOS専用: suite名指定
+final prefs = await SharedPreferences.getInstance();
+// home_widget パッケージ推奨
+```
+
+---
+
 ## Dart FFI
 
 ### セットアップ

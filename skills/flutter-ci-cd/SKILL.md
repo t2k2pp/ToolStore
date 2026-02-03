@@ -240,12 +240,157 @@ android {
 }
 ```
 
-### iOS Match
+### iOS署名とデプロイ（詳細）
+
+#### Fastlane Match（証明書自動管理）
 ```bash
-# 証明書管理（Match）
+# 初期設定
+cd ios
 fastlane match init
-fastlane match appstore
+# Git リポジトリURL入力（プライベート推奨）
+
+# 証明書・プロビジョニング自動生成
+fastlane match development  # 開発用
+fastlane match appstore     # 配布用
 ```
+
+#### Match Gitリポジトリ構成
+```
+certificates/
+├── certs/
+│   ├── development/
+│   │   └── XXXXX.cer
+│   └── distribution/
+│       └── XXXXX.cer
+├── profiles/
+│   ├── development/
+│   │   └── Development_com.example.app.mobileprovision
+│   └── appstore/
+│       └── AppStore_com.example.app.mobileprovision
+└── match_version.txt
+```
+
+#### GitHub ActionsでiOS署名ビルド
+```yaml
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          cache: true
+
+      # SSH鍵設定（Match用Gitリポジトリアクセス）
+      - name: Setup SSH Keys
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.MATCH_GIT_PRIVATE_KEY }}
+
+      # Ruby/Fastlane設定
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+          working-directory: ios
+      
+      # Match証明書取得
+      - name: Fetch Certificates
+        run: |
+          cd ios
+          bundle exec fastlane match appstore --readonly
+        env:
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+
+      # ビルド
+      - run: flutter pub get
+      - run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
+
+      # TestFlightアップロード
+      - name: Upload to TestFlight
+        run: |
+          cd ios
+          bundle exec fastlane beta
+        env:
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_CONTENT: ${{ secrets.ASC_KEY_CONTENT }}
+```
+
+#### App Store Connect API Key設定
+```ruby
+# ios/fastlane/Fastfile
+lane :beta do
+  # CI環境でキーチェーン作成
+  setup_ci if ENV['CI']
+
+  # API Key認証（パスワード不要）
+  api_key = app_store_connect_api_key(
+    key_id: ENV['APP_STORE_CONNECT_API_KEY_ID'],
+    issuer_id: ENV['APP_STORE_CONNECT_API_ISSUER_ID'],
+    key_content: ENV['APP_STORE_CONNECT_API_KEY_CONTENT'],
+    is_key_content_base64: true
+  )
+
+  # 証明書取得
+  match(type: "appstore", readonly: true, api_key: api_key)
+
+  # ビルド
+  build_app(
+    workspace: "Runner.xcworkspace",
+    scheme: "Runner",
+    export_method: "app-store"
+  )
+
+  # TestFlightアップロード
+  upload_to_testflight(
+    api_key: api_key,
+    skip_waiting_for_build_processing: true
+  )
+end
+
+lane :release do
+  api_key = app_store_connect_api_key(...)
+  
+  # 審査提出
+  upload_to_app_store(
+    api_key: api_key,
+    submit_for_review: true,
+    automatic_release: false,
+    force: true
+  )
+end
+```
+
+#### ExportOptions.plist（署名済みIPA出力用）
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "...">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    <key>teamID</key>
+    <string>YOUR_TEAM_ID</string>
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <true/>
+</dict>
+</plist>
+```
+
+#### iOS用GitHub Secrets一覧
+| Secret名 | 内容 |
+|---------|------|
+| MATCH_GIT_URL | Match証明書リポジトリURL |
+| MATCH_GIT_PRIVATE_KEY | Match用SSH秘密鍵 |
+| MATCH_PASSWORD | Match暗号化パスワード |
+| ASC_KEY_ID | App Store Connect API Key ID |
+| ASC_ISSUER_ID | App Store Connect Issuer ID |
+| ASC_KEY_CONTENT | API Key (.p8) Base64 |
 
 ---
 

@@ -8,7 +8,7 @@ Flutter 2025-2026ベストプラクティスに基づく、AI駆動開発支援�
 
 | カテゴリ | 内容 | 数 |
 |---------|------|-----|
-| スキル | 開発フェーズ別の専門スキル | 13 |
+| スキル | 開発フェーズ別の専門スキル | 15 |
 | サブエージェント | 役割別のAIエージェント | 11 |
 | ワークフロー | 開発フロー定義 | 3 |
 | テンプレート | プロジェクト/設計/テスト | 3 |
@@ -37,7 +37,9 @@ skills/
 ├── flutter-i18n/          # 多言語対応（国際化）
 ├── flutter-native-integration/ # ネイティブ連携
 ├── flutter-analytics/     # 分析・監視（Firebase）
-└── flutter-migration/     # マイグレーション・リファクタリング
+├── flutter-migration/     # マイグレーション・リファクタリング
+├── ios-platform-setup/    # iOS環境設定（Xcode/証明書/プロビジョニング）
+└── ios-store-guidelines/  # App Store審査対策・HIG準拠
 ```
 
 **使用例:**
