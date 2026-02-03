@@ -54,21 +54,21 @@ keywords: [flutter, ヘルスケア]
 ```powershell
 # スキル取得
 New-Item -ItemType Directory -Force -Path ".agent/skills/flutter-development"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/skills/flutter-development/SKILL.md" -OutFile ".agent/skills/flutter-development/SKILL.md"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/master/domains/mobile/flutter/skills/flutter-development/SKILL.md" -OutFile ".agent/skills/flutter-development/SKILL.md"
 
 # サブエージェント取得
 New-Item -ItemType Directory -Force -Path ".agent/subagents"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/subagents/flutter-developer.md" -OutFile ".agent/subagents/flutter-developer.md"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/master/domains/mobile/flutter/subagents/flutter-developer.md" -OutFile ".agent/subagents/flutter-developer.md"
 ```
 
 #### Bash（macOS/Linux）
 ```bash
 # スキル取得
-curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/skills/flutter-development/SKILL.md \
+curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/master/domains/mobile/flutter/skills/flutter-development/SKILL.md \
   -o .agent/skills/flutter-development/SKILL.md --create-dirs
 
 # サブエージェント取得
-curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/subagents/flutter-developer.md \
+curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/master/domains/mobile/flutter/subagents/flutter-developer.md \
   -o .agent/subagents/flutter-developer.md --create-dirs
 ```
 
@@ -87,7 +87,7 @@ Copy-Item -Recurse domains/mobile/flutter/skills/flutter-development ../.agent/s
 
 ```
 1. catalog.yaml をGitHubから読み込む
-   URL: https://raw.githubusercontent.com/t2k2pp/ToolStore/main/catalog.yaml
+   URL: https://raw.githubusercontent.com/t2k2pp/ToolStore/master/catalog.yaml
 
 2. ユーザーの要件からキーワード抽出
    - 技術: flutter, react, python など
@@ -150,5 +150,5 @@ Copy-Item -Recurse domains/mobile/flutter/skills/flutter-development ../.agent/s
 
 ## カタログURL
 
-- **カタログ**: https://raw.githubusercontent.com/t2k2pp/ToolStore/main/catalog.yaml
+- **カタログ**: https://raw.githubusercontent.com/t2k2pp/ToolStore/master/catalog.yaml
 - **リポジトリ**: https://github.com/t2k2pp/ToolStore

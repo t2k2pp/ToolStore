@@ -38,7 +38,7 @@ ToolStore/
 ```powershell
 # PowerShell（Windows）
 New-Item -ItemType Directory -Force -Path ".agent/skills/skill-fetcher"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/main/fetcher/SKILL.md" -OutFile ".agent/skills/skill-fetcher/SKILL.md"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/master/fetcher/SKILL.md" -OutFile ".agent/skills/skill-fetcher/SKILL.md"
 ```
 
 ### 2. やりたいことを伝える
