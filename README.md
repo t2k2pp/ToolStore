@@ -1,195 +1,123 @@
-# Flutter モバイルアプリ開発支援ツール
+# t2k2pp Tool Store
 
-Flutter 2025-2026ベストプラクティスに基づく、AI駆動開発支援ツールセットです。
+AI駆動開発のためのスキル、サブエージェント、MCP、ワークフロー集。
 
-## 概要
+## 📦 概要
 
-このリポジトリには以下が含まれています：
+このリポジトリは、AI（Claude等）による開発を支援するツールストアです。
+プロジェクトに必要なツールを動的に取得して使用できます。
 
-| カテゴリ | 内容 | 数 |
-|---------|------|-----|
-| スキル | 開発フェーズ別の専門スキル | 15 |
-| サブエージェント | 役割別のAIエージェント | 11 |
-| ワークフロー | 開発フロー定義 | 3 |
-| テンプレート | プロジェクト/設計/テスト | 3 |
-| チェックリスト | 品質ゲート | 4 |
-| 設定サンプル | Flutter推奨設定 | 2 |
-
----
-
-## クイックスタート
-
-### 1. スキルの使用
-
-スキルは特定の開発タスクを支援するナレッジベースです。
+## 🏗️ 構造
 
 ```
-skills/
-├── ai-flutter-guidelines/     # AI開発ガイドライン（禁止事項・対策）★必読
-├── mobile-app-design/     # アプリ設計ガイド
-├── mobile-app-uiux/       # UI/UX設計ガイド
-├── flutter-development/   # 実装ガイド（Riverpod 3.0）
-├── flutter-tdd/           # TDDガイド
-├── flutter-code-review/   # コードレビューガイド
-├── flutter-debugging/     # デバッグガイド
-├── flutter-ci-cd/         # CI/CD・デプロイ自動化
-├── flutter-performance/   # パフォーマンス最適化
-├── flutter-i18n/          # 多言語対応（国際化）
-├── flutter-native-integration/ # ネイティブ連携
-├── flutter-analytics/     # 分析・監視（Firebase）
-├── flutter-migration/     # マイグレーション・リファクタリング
-├── ios-platform-setup/    # iOS環境設定（Xcode/証明書/プロビジョニング）
-└── ios-store-guidelines/  # App Store審査対策・HIG準拠
+ToolStore/
+├── catalog.yaml              # ツールカタログ（インデックス）
+├── fetcher/                  # skill-fetcher（ツール取得スキル）
+│   └── SKILL.md
+│
+├── domains/                  # ドメイン別ツール
+│   ├── mobile/
+│   │   ├── flutter/          # Flutter/Dart (15スキル, 11エージェント)
+│   │   ├── swift/            # iOS ネイティブ（計画中）
+│   │   └── kotlin/           # Android ネイティブ（計画中）
+│   └── common/               # 共通ツール
+│       └── skills/
+│           └── ai-flutter-guidelines/
+│
+└── mcps/                     # Model Context Protocols
+    ├── database/             # Supabase, Firebase
+    ├── search/               # Web検索
+    ├── storage/              # S3
+    └── ai/                   # OpenAI
 ```
 
-**使用例:**
-> 「新機能の設計を始めたい」→ `skills/mobile-app-design/SKILL.md` を参照
+## 🚀 使用方法
 
-### 2. サブエージェントの使用
+### 1. fetcher スキルをプロジェクトに配置
 
-サブエージェントは特定の役割を持つAIアシスタントです。
-
-```
-subagents/
-├── mobile-architect.md    # 設計判断・アーキテクチャ
-├── uiux-designer.md       # UI/UX設計
-├── security-expert.md     # セキュリティレビュー
-├── flutter-developer.md   # 実装
-├── flutter-tdd-runner.md  # テスト作成
-├── flutter-reviewer.md    # コードレビュー
-├── flutter-debugger.md    # バグ修正
-├── devops-engineer.md     # CI/CD・デプロイ自動化
-├── performance-specialist.md # パフォーマンスチューニング
-├── documentation-writer.md # 技術ドキュメント作成
-└── localization-expert.md # 多言語対応・ローカライゼーション
+```bash
+# fetcherをコピー
+curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/main/fetcher/SKILL.md \
+  -o .agent/skills/skill-fetcher/SKILL.md --create-dirs
 ```
 
-**使用例:**
-> 「この設計をレビューして」→ `mobile-architect` を呼び出し
-
-### 3. ワークフローに従う
+### 2. やりたいことを伝える
 
 ```
-workflows/
-├── development-flow.md   # 開発フロー全体
-├── design-to-impl.md     # 設計→実装フロー
-└── review-release.md     # レビュー→リリースフロー
+「Flutterでヘルスケアアプリを作りたい」
 ```
 
-**標準フロー:**
-```
-DESIGN → SECURITY_REVIEW → IMPLEMENT → TEST → REVIEW → RELEASE
-```
+### 3. 推奨ツールが提案される
 
----
+| カテゴリ | ツール | 説明 |
+|---------|--------|------|
+| skill | flutter-development | Riverpod 3.0実装ガイド |
+| skill | flutter-native-integration | HealthKit連携 |
+| skill | ai-flutter-guidelines | AI禁止事項【必須】 |
+| subagent | flutter-developer | 実装担当エージェント |
 
-## スキル詳細
+### 4. 承認後、自動取得・開発開始
 
-### mobile-app-design
-- Clean Architecture設計
-- Riverpod 3.0状態管理パターン
-- データモデリング（freezed）
-- ADR（意思決定記録）
+## 📂 ツール一覧
 
-### mobile-app-uiux
-- Material Design 3準拠
-- レスポンシブレイアウト（Compact/Medium/Expanded）
-- アクセシビリティ（WCAG 2.1 AA）
-- デザイントークン定義
+### スキル
 
-### flutter-development
-- Riverpod 3.0 + コード生成
-- constコンストラクタ最適化
-- パフォーマンス（ListView.builder, Isolate）
-- エラーハンドリング
+| ドメイン | ID | 説明 |
+|---------|-----|------|
+| flutter | flutter-development | Riverpod 3.0、Widget実装 |
+| flutter | flutter-tdd | TDD（Red-Green-Refactor） |
+| flutter | flutter-code-review | コードレビュー |
+| flutter | flutter-debugging | デバッグ・DevTools |
+| flutter | flutter-ci-cd | CI/CD・ストアデプロイ |
+| flutter | flutter-performance | パフォーマンス最適化 |
+| flutter | flutter-i18n | 多言語対応 |
+| flutter | flutter-native-integration | ネイティブ連携・iOS固有API |
+| flutter | flutter-analytics | Firebase Analytics |
+| flutter | flutter-migration | マイグレーション |
+| flutter | ios-platform-setup | Xcode・証明書設定 |
+| flutter | ios-store-guidelines | App Store審査対策 |
+| flutter | mobile-app-design | Clean Architecture設計 |
+| flutter | mobile-app-uiux | Material Design 3・HIG |
+| common | ai-flutter-guidelines | **AI開発禁止事項【必須】** |
 
-### flutter-tdd
-- Red-Green-Refactorサイクル
-- unit/widget/integrationテスト
-- Mocktailによるモック
-- カバレッジ目標（80%+）
+### サブエージェント
 
-### flutter-code-review
-- CRITICAL/HIGH/MEDIUM/LOW分類
-- セキュリティチェック
-- パフォーマンスチェック
-- アーキテクチャ準拠確認
+| ID | 役割 | モデル |
+|----|------|--------|
+| flutter-developer | 製造実装 | Sonnet |
+| mobile-architect | 設計・技術選定 | Opus |
+| uiux-designer | UI/UX設計 | Sonnet |
+| security-expert | セキュリティ | Opus |
+| flutter-tdd-runner | TDD実行 | Sonnet |
+| flutter-reviewer | コードレビュー | Opus |
+| flutter-debugger | デバッグ | Sonnet |
+| devops-engineer | CI/CD | Sonnet |
+| performance-specialist | パフォーマンス | Opus |
+| documentation-writer | ドキュメント | Sonnet |
+| localization-expert | 多言語 | Sonnet |
 
-### flutter-debugging
-- DevTools活用
-- よくあるエラーパターンと解決策
-- メモリリーク検出
-- クラッシュ分析
+### MCP（準備中）
 
----
+| カテゴリ | ID | 説明 |
+|---------|----|------|
+| database | supabase-mcp | Supabase連携 |
+| database | firebase-mcp | Firebase連携 |
+| search | web-search-mcp | Web検索 |
+| storage | s3-mcp | AWS S3 |
+| ai | openai-mcp | OpenAI API |
 
-## テンプレート
+## 📋 カタログ
 
-### プロジェクト構造
-Feature-Firstアーキテクチャのディレクトリ構成
+詳細は [catalog.yaml](./catalog.yaml) を参照。
 
-### 設計書テンプレート
-機能設計書の標準フォーマット
+## 🔮 ロードマップ
 
-### テストケーステンプレート
-unit/widget/integrationテストの記述例
+- [ ] Swift スキル・サブエージェント
+- [ ] Kotlin スキル・サブエージェント
+- [ ] Web（React/Next.js）ドメイン
+- [ ] Backend（Python/Go）ドメイン
+- [ ] MCP 実装
 
----
+## 📝 ライセンス
 
-## チェックリスト
-
-| チェックリスト | 使用タイミング |
-|---------------|---------------|
-| design-checklist.md | 設計完了時 |
-| implementation-checklist.md | 実装完了時 |
-| security-checklist.md | セキュリティレビュー時 |
-| release-checklist.md | リリース前 |
-
----
-
-## 設定サンプル
-
-### analysis_options.yaml
-Flutter推奨のlint設定（strict mode）
-
-### pubspec_template.yaml
-2026年2月時点の推奨パッケージ構成
-- Riverpod 3.0
-- Dio + Retrofit
-- freezed
-- flutter_secure_storage
-
----
-
-## 技術スタック（推奨）
-
-| カテゴリ | 推奨 |
-|---------|------|
-| 状態管理 | Riverpod 3.0 |
-| アーキテクチャ | Clean Architecture (Feature-First) |
-| ネットワーク | Dio + Retrofit |
-| モデル | freezed + json_serializable |
-| セキュアストレージ | flutter_secure_storage |
-| テスト | Mocktail |
-| 静的解析 | flutter_lints + カスタム |
-
----
-
-## 使い方のヒント
-
-1. **新規プロジェクト開始時**
-   - `templates/project-structure/` を参考に構造作成
-   - `config-samples/` の設定を適用
-
-2. **機能開発時**
-   - `workflows/development-flow.md` に従う
-   - 各フェーズで対応するスキル/サブエージェントを使用
-
-3. **品質確保**
-   - 各フェーズで対応するチェックリストを確認
-
----
-
-## ライセンス
-
-MIT License
+Private - t2k2pp

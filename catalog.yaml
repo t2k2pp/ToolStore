@@ -1,0 +1,330 @@
+version: "1.0"
+store_name: "t2k2pp Tool Store"
+description: "AI駆動開発のためのスキル、サブエージェント、MCP、ワークフロー集"
+last_updated: "2026-02-04"
+repository: "https://github.com/t2k2pp/ToolStore"
+
+# ツールタイプ定義
+tool_types:
+  skill: "知識・手順書（SKILL.md形式）"
+  subagent: "役割別AIエージェント（.md形式）"
+  workflow: "開発フロー定義"
+  template: "プロジェクト/設計テンプレート"
+  checklist: "品質チェックリスト"
+  config: "設定ファイルサンプル"
+  mcp: "Model Context Protocol"
+
+# =============================================================================
+# ドメイン定義
+# =============================================================================
+domains:
+  # ---------------------------------------------------------------------------
+  # モバイル開発
+  # ---------------------------------------------------------------------------
+  mobile:
+    flutter:
+      name: "Flutter/Dart"
+      description: "クロスプラットフォームモバイル開発（iOS/Android）"
+      path: "domains/mobile/flutter"
+      
+      skills:
+        - id: flutter-development
+          name: "Flutter開発"
+          path: "domains/mobile/flutter/skills/flutter-development"
+          description: "Riverpod 3.0による状態管理、Widget実装、パフォーマンス最適化"
+          tags: [riverpod, state-management, dart, implementation]
+          dependencies: [ai-flutter-guidelines]
+          
+        - id: flutter-tdd
+          name: "Flutter TDD"
+          path: "domains/mobile/flutter/skills/flutter-tdd"
+          description: "Red-Green-Refactor、unit/widget/integrationテスト"
+          tags: [testing, tdd, unit-test, widget-test]
+          dependencies: [ai-flutter-guidelines]
+          
+        - id: flutter-code-review
+          name: "Flutterコードレビュー"
+          path: "domains/mobile/flutter/skills/flutter-code-review"
+          description: "コード品質、セキュリティ、パフォーマンスレビュー"
+          tags: [review, quality, security]
+          
+        - id: flutter-debugging
+          name: "Flutterデバッグ"
+          path: "domains/mobile/flutter/skills/flutter-debugging"
+          description: "DevTools活用、バグ修正パターン、メモリリーク検出"
+          tags: [debugging, devtools, troubleshooting]
+          
+        - id: flutter-ci-cd
+          name: "Flutter CI/CD"
+          path: "domains/mobile/flutter/skills/flutter-ci-cd"
+          description: "GitHub Actions、Fastlane、ストアデプロイ自動化"
+          tags: [ci-cd, github-actions, fastlane, deployment]
+          
+        - id: flutter-performance
+          name: "Flutterパフォーマンス"
+          path: "domains/mobile/flutter/skills/flutter-performance"
+          description: "レンダリング最適化、メモリ管理、起動時間短縮"
+          tags: [performance, optimization, memory]
+          
+        - id: flutter-i18n
+          name: "Flutter国際化"
+          path: "domains/mobile/flutter/skills/flutter-i18n"
+          description: "多言語対応、ARBファイル、RTL対応"
+          tags: [i18n, localization, internationalization]
+          
+        - id: flutter-native-integration
+          name: "Flutterネイティブ連携"
+          path: "domains/mobile/flutter/skills/flutter-native-integration"
+          description: "Platform Channel、Pigeon、FFI、iOS/Android固有API"
+          tags: [native, platform-channel, pigeon, ffi]
+          
+        - id: flutter-analytics
+          name: "Flutter分析"
+          path: "domains/mobile/flutter/skills/flutter-analytics"
+          description: "Firebase Analytics/Crashlytics統合"
+          tags: [analytics, firebase, crashlytics, monitoring]
+          
+        - id: flutter-migration
+          name: "Flutterマイグレーション"
+          path: "domains/mobile/flutter/skills/flutter-migration"
+          description: "バージョンアップ、Provider→Riverpod移行"
+          tags: [migration, upgrade, refactoring]
+          
+        - id: ios-platform-setup
+          name: "iOSプラットフォーム設定"
+          path: "domains/mobile/flutter/skills/ios-platform-setup"
+          description: "Xcode、証明書、プロビジョニング、Capabilities設定"
+          tags: [ios, xcode, certificates, provisioning]
+          
+        - id: ios-store-guidelines
+          name: "App Store審査ガイドライン"
+          path: "domains/mobile/flutter/skills/ios-store-guidelines"
+          description: "App Store審査対策、HIG準拠、リジェクト回避"
+          tags: [ios, app-store, hig, review]
+          
+        - id: mobile-app-design
+          name: "モバイルアプリ設計"
+          path: "domains/mobile/flutter/skills/mobile-app-design"
+          description: "Clean Architecture、Riverpod状態管理設計"
+          tags: [architecture, design, clean-architecture]
+          
+        - id: mobile-app-uiux
+          name: "モバイルUI/UX"
+          path: "domains/mobile/flutter/skills/mobile-app-uiux"
+          description: "Material Design 3、HIG、レスポンシブ、アクセシビリティ"
+          tags: [uiux, material-design, hig, accessibility]
+
+      subagents:
+        - id: flutter-developer
+          name: "Flutter製造者"
+          path: "domains/mobile/flutter/subagents/flutter-developer.md"
+          description: "Riverpod 3.0による状態管理、Widget実装"
+          model: sonnet
+          
+        - id: mobile-architect
+          name: "モバイルアーキテクト"
+          path: "domains/mobile/flutter/subagents/mobile-architect.md"
+          description: "Clean Architecture設計、技術選定"
+          model: opus
+          
+        - id: uiux-designer
+          name: "UI/UXデザイナー"
+          path: "domains/mobile/flutter/subagents/uiux-designer.md"
+          description: "Material Design 3、HIG準拠UI設計"
+          model: sonnet
+          
+        - id: security-expert
+          name: "セキュリティエキスパート"
+          path: "domains/mobile/flutter/subagents/security-expert.md"
+          description: "認証・認可、データ暗号化、脆弱性検出"
+          model: opus
+          
+        - id: flutter-tdd-runner
+          name: "Flutter TDDランナー"
+          path: "domains/mobile/flutter/subagents/flutter-tdd-runner.md"
+          description: "Red-Green-Refactorサイクル実行"
+          model: sonnet
+          
+        - id: flutter-reviewer
+          name: "Flutterレビュアー"
+          path: "domains/mobile/flutter/subagents/flutter-reviewer.md"
+          description: "コード品質・セキュリティレビュー"
+          model: opus
+          
+        - id: flutter-debugger
+          name: "Flutterデバッガー"
+          path: "domains/mobile/flutter/subagents/flutter-debugger.md"
+          description: "バグ原因特定、修正実装"
+          model: sonnet
+          
+        - id: devops-engineer
+          name: "DevOpsエンジニア"
+          path: "domains/mobile/flutter/subagents/devops-engineer.md"
+          description: "CI/CD構築、デプロイ自動化"
+          model: sonnet
+          
+        - id: performance-specialist
+          name: "パフォーマンススペシャリスト"
+          path: "domains/mobile/flutter/subagents/performance-specialist.md"
+          description: "パフォーマンスチューニング"
+          model: opus
+          
+        - id: documentation-writer
+          name: "ドキュメントライター"
+          path: "domains/mobile/flutter/subagents/documentation-writer.md"
+          description: "技術ドキュメント作成"
+          model: sonnet
+          
+        - id: localization-expert
+          name: "ローカライゼーションエキスパート"
+          path: "domains/mobile/flutter/subagents/localization-expert.md"
+          description: "多言語対応、i18n実装"
+          model: sonnet
+
+      workflows:
+        - id: development-flow
+          name: "開発フロー"
+          path: "domains/mobile/flutter/workflows/development-flow.md"
+          
+        - id: design-to-impl
+          name: "設計→実装フロー"
+          path: "domains/mobile/flutter/workflows/design-to-impl.md"
+          
+        - id: review-release
+          name: "レビュー→リリースフロー"
+          path: "domains/mobile/flutter/workflows/review-release.md"
+
+    swift:
+      name: "Swift"
+      description: "iOS/macOSネイティブ開発（将来実装予定）"
+      path: "domains/mobile/swift"
+      status: "planned"
+      skills: []
+      subagents: []
+
+    kotlin:
+      name: "Kotlin"
+      description: "Androidネイティブ開発（将来実装予定）"
+      path: "domains/mobile/kotlin"
+      status: "planned"
+      skills: []
+      subagents: []
+
+  # ---------------------------------------------------------------------------
+  # 共通ツール
+  # ---------------------------------------------------------------------------
+  common:
+    name: "共通"
+    description: "全ドメインで使用する共通ツール"
+    path: "domains/common"
+    
+    skills:
+      - id: ai-flutter-guidelines
+        name: "AI開発ガイドライン"
+        path: "domains/common/skills/ai-flutter-guidelines"
+        description: "AI駆動開発の禁止事項、よくある問題と対策"
+        tags: [ai, guidelines, best-practices, must-read]
+        required: true
+
+# =============================================================================
+# MCP定義
+# =============================================================================
+mcps:
+  database:
+    - id: supabase-mcp
+      name: "Supabase MCP"
+      path: "mcps/database/supabase-mcp"
+      description: "Supabaseデータベース連携"
+      status: "placeholder"
+      
+    - id: firebase-mcp
+      name: "Firebase MCP"
+      path: "mcps/database/firebase-mcp"
+      description: "Firebase Firestore連携"
+      status: "placeholder"
+      
+  search:
+    - id: web-search-mcp
+      name: "Web検索 MCP"
+      path: "mcps/search/web-search-mcp"
+      description: "Webコンテンツ検索"
+      status: "placeholder"
+      
+  storage:
+    - id: s3-mcp
+      name: "S3 MCP"
+      path: "mcps/storage/s3-mcp"
+      description: "AWS S3ストレージ連携"
+      status: "placeholder"
+      
+  ai:
+    - id: openai-mcp
+      name: "OpenAI MCP"
+      path: "mcps/ai/openai-mcp"
+      description: "OpenAI API連携"
+      status: "placeholder"
+
+# =============================================================================
+# 推奨マッピング
+# =============================================================================
+recommendations:
+  - keywords: [flutter, dart, mobile, クロスプラットフォーム, モバイルアプリ]
+    suggest:
+      skills: [flutter-development, flutter-tdd, mobile-app-design, mobile-app-uiux]
+      subagents: [flutter-developer, mobile-architect, flutter-tdd-runner]
+      common: [ai-flutter-guidelines]
+      
+  - keywords: [ios, iphone, ipad, app store, apple]
+    suggest:
+      skills: [ios-platform-setup, ios-store-guidelines, flutter-ci-cd]
+      
+  - keywords: [android, google play, play store]
+    suggest:
+      skills: [flutter-ci-cd]
+      
+  - keywords: [ヘルスケア, health, 健康, 歩数, 心拍]
+    suggest:
+      skills: [flutter-native-integration]
+      
+  - keywords: [ci, cd, 自動化, デプロイ, リリース]
+    suggest:
+      skills: [flutter-ci-cd]
+      subagents: [devops-engineer]
+      
+  - keywords: [パフォーマンス, 最適化, 高速化, メモリ]
+    suggest:
+      skills: [flutter-performance]
+      subagents: [performance-specialist]
+      
+  - keywords: [多言語, 国際化, i18n, 翻訳, ローカライズ]
+    suggest:
+      skills: [flutter-i18n]
+      subagents: [localization-expert]
+      
+  - keywords: [テスト, tdd, ユニットテスト, 品質]
+    suggest:
+      skills: [flutter-tdd]
+      subagents: [flutter-tdd-runner]
+      
+  - keywords: [レビュー, コードレビュー, 品質チェック]
+    suggest:
+      skills: [flutter-code-review]
+      subagents: [flutter-reviewer]
+      
+  - keywords: [デバッグ, バグ, エラー, 修正]
+    suggest:
+      skills: [flutter-debugging]
+      subagents: [flutter-debugger]
+      
+  - keywords: [セキュリティ, 認証, 暗号化, 脆弱性]
+    suggest:
+      subagents: [security-expert]
+      
+  - keywords: [firebase, analytics, crashlytics, 分析]
+    suggest:
+      skills: [flutter-analytics]
+      mcps: [firebase-mcp]
+      
+  - keywords: [supabase, postgres, データベース]
+    suggest:
+      mcps: [supabase-mcp]
