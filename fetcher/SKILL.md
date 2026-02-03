@@ -49,6 +49,19 @@ keywords: [flutter, ヘルスケア]
 ## 取得コマンド
 
 ### 単一ツール取得
+
+#### PowerShell（Windows）
+```powershell
+# スキル取得
+New-Item -ItemType Directory -Force -Path ".agent/skills/flutter-development"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/skills/flutter-development/SKILL.md" -OutFile ".agent/skills/flutter-development/SKILL.md"
+
+# サブエージェント取得
+New-Item -ItemType Directory -Force -Path ".agent/subagents"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/subagents/flutter-developer.md" -OutFile ".agent/subagents/flutter-developer.md"
+```
+
+#### Bash（macOS/Linux）
 ```bash
 # スキル取得
 curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/flutter/skills/flutter-development/SKILL.md \
@@ -60,12 +73,12 @@ curl -sL https://raw.githubusercontent.com/t2k2pp/ToolStore/main/domains/mobile/
 ```
 
 ### 一括取得（推奨）
-```bash
-# Gitサブツリーまたはスパースチェックアウト
+```powershell
+# Gitスパースチェックアウト
 git clone --filter=blob:none --sparse https://github.com/t2k2pp/ToolStore.git .tool-cache
 cd .tool-cache
 git sparse-checkout set domains/mobile/flutter/skills/flutter-development
-cp -r domains/mobile/flutter/skills/flutter-development ../.agent/skills/
+Copy-Item -Recurse domains/mobile/flutter/skills/flutter-development ../.agent/skills/
 ```
 
 ---
