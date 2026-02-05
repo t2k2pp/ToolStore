@@ -47,12 +47,45 @@ AI（LLM）を活用したFlutter開発で発生しやすい問題と、その�
 ❌ 禁止: コンパイルエラーを放置する
 ❌ 禁止: 「とりあえず動く」状態で完了とする
 ❌ 禁止: 警告を無視する（特にdeprecated警告）
+❌ 禁止: Linter警告（Infoレベル含む）を無視してpushする
 
 ✅ 必須: 全エラーを解消してから完了とする
 ✅ 必須: 警告も可能な限り解消する
+✅ 必須: flutter analyze が警告0件になるまで修正する
 ```
 
-### 5. 無駄なリトライ
+### 5. ビルド検証の省略【重要】
+```
+❌ 禁止: flutter analyze のみで完了とする
+❌ 禁止: ネイティブプラグイン導入後にビルド検証をスキップする
+❌ 禁止: 「静的解析OKなのでビルドも通る」と仮定する
+
+✅ 必須: ネイティブプラグイン（health, camera, geolocator等）導入時は必ずビルド実行
+✅ 必須: flutter build apk --debug（Android）または flutter build ios --debug（iOS）で検証
+✅ 必須: ビルドエラーが出たら解消してから完了とする
+
+理由: 静的解析では検知できないネイティブ依存問題が多数存在する
+- NDKバージョン不一致
+- minSdkVersion不足
+- Kotlin/Gradle互換性問題
+```
+
+### 6. パッケージ互換性確認の省略
+```
+❌ 禁止: パッケージを追加する際にChangelog/Issueを確認せずに導入する
+❌ 禁止: 最新版を無条件でインストールする
+❌ 禁止: ネイティブ要求スペック（minSdk, NDK, Kotlin）を確認しない
+
+✅ 必須: pubspec.yaml編集前に以下を確認:
+   1. pub.devでパッケージのChangelogを確認
+   2. GitHubのIssueで既知の互換性問題を検索
+   3. android/app/build.gradleのminSdk/compileSdkを確認
+   4. プラグインが要求するNDK/Kotlinバージョンを確認
+
+✅ 必須: 破壊的変更がある場合はユーザーに報告してから進める
+```
+
+### 7. 無駄なリトライ
 ```
 ❌ 禁止: 同じアプローチを3回以上繰り返す
 ❌ 禁止: ユーザーの要望に忖度して不可能なことを繰り返し試す
@@ -116,14 +149,26 @@ class MyNotifier extends _$MyNotifier {
 ```
 
 **チェックすべき非推奨パターン:**
-| 非推奨 | 現在の推奨 |
-|-------|-----------|
-| `Provider`パッケージ | `flutter_riverpod` |
-| `setState` + StatefulWidget | Riverpod + ConsumerWidget |
-| `FutureBuilder` | `FutureProvider` / `AsyncValue` |
-| `StreamBuilder` | `StreamProvider` |
-| `Navigator 1.0` | `go_router` |
-| `http`パッケージ | `dio` |
+| 非推奨 | 現在の推奨 | 備考 |
+|-------|-----------|------|
+| `Provider`パッケージ | `flutter_riverpod` | 状態管理 |
+| `setState` + StatefulWidget | Riverpod + ConsumerWidget | 状態管理 |
+| `FutureBuilder` | `FutureProvider` / `AsyncValue` | 非同期 |
+| `StreamBuilder` | `StreamProvider` | ストリーム |
+| `Navigator 1.0` | `go_router` | ナビゲーション |
+| `http`パッケージ | `dio` | HTTP通信 |
+| `Color.withOpacity()` | `Color.withValues(alpha:)` | Flutter 3.27+ |
+| `MaterialStateProperty` | `WidgetStateProperty` | Flutter 3.22+ |
+| `MaterialState` | `WidgetState` | Flutter 3.22+ |
+
+**ネイティブ要求スペック確認必須パターン（2026年2月時点）:**
+| パッケージ | 最低minSdk | NDK要求 | 備考 |
+|-----------|------------|---------|------|
+| `health` v13+ | 26 | 27.0.x | HealthKit/Google Fit |
+| `geolocator` | 21 | - | 位置情報 |
+| `camera` | 21 | - | カメラ |
+| `firebase_*` | 21 | - | Firebase系 |
+| `google_maps_flutter` | 20 | - | Google Maps |
 
 ### 3. ハルシネーション（存在しないAPI）
 

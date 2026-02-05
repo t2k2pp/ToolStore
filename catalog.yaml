@@ -1,7 +1,7 @@
 version: "1.0"
 store_name: "t2k2pp Tool Store"
 description: "AI駆動開発のためのスキル、サブエージェント、MCP、ワークフロー集"
-last_updated: "2026-02-04"
+last_updated: "2026-02-06"
 repository: "https://github.com/t2k2pp/ToolStore"
 
 # ツールタイプ定義
@@ -113,6 +113,13 @@ domains:
           path: "domains/mobile/flutter/skills/mobile-app-uiux"
           description: "Material Design 3、HIG、レスポンシブ、アクセシビリティ"
           tags: [uiux, material-design, hig, accessibility]
+          
+        - id: flutter-environment-check
+          name: "Flutter環境診断"
+          path: "domains/mobile/flutter/skills/flutter-environment-check"
+          description: "flutter doctor、SDK/NDK確認、プロジェクト設定検証、ネイティブ互換性チェック"
+          tags: [environment, sdk, ndk, gradle, kotlin, setup]
+          required_for: [native-plugins]
 
       subagents:
         - id: flutter-developer
@@ -282,9 +289,9 @@ recommendations:
     suggest:
       skills: [flutter-ci-cd]
       
-  - keywords: [ヘルスケア, health, 健康, 歩数, 心拍]
+  - keywords: [ヘルスケア, health, 健康, 歩数, 心拍, ネイティブプラグイン, native plugin]
     suggest:
-      skills: [flutter-native-integration]
+      skills: [flutter-native-integration, flutter-environment-check]
       
   - keywords: [ci, cd, 自動化, デプロイ, リリース]
     suggest:
