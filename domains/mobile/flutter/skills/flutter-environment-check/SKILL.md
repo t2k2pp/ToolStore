@@ -95,6 +95,59 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-8.4-all.zip
 #### ios/Podfile
 ```ruby
 platform :ios, '13.0'  # 多くのプラグインは13.0以上必要
+
+# CocoaPods推奨設定
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+    end
+  end
+end
+```
+
+#### ios/Runner.xcodeproj/project.pbxproj（確認項目）
+- `IPHONEOS_DEPLOYMENT_TARGET` = 13.0以上
+- `SWIFT_VERSION` = 5.0以上
+
+#### CocoaPods診断
+```bash
+# バージョン確認
+pod --version
+# 推奨: 1.14.x以上
+
+# キャッシュクリア・再インストール
+cd ios
+rm -rf Pods Podfile.lock
+pod repo update
+pod install --repo-update
+```
+
+### iOS固有の互換性マトリクス
+
+| Xcode | Swift | iOS最低 | 備考 |
+|-------|-------|---------|------|
+| 15.0+ | 5.9+ | 12.0+ | Flutter 3.16+ |
+| 15.2+ | 5.9.2+ | 13.0+ | Flutter 3.19推奨 |
+| 16.0+ | 6.0+ | 13.0+ | 最新 |
+
+### iOS環境診断コマンド
+
+```bash
+# Xcode確認
+xcodebuild -version
+xcrun --show-sdk-path
+
+# Swift確認
+swift --version
+
+# CocoaPods確認
+pod --version
+pod env
+
+# シミュレータ一覧
+xcrun simctl list devices
 ```
 
 ---

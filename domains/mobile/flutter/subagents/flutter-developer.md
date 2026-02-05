@@ -65,8 +65,12 @@ ref.watch(provider).when(
 - [ ] Provider定義にコード生成を使用
 - [ ] エラー状態をハンドリング
 - [ ] ローディング状態を表示
-- [ ] flutter analyzeが通る
+- [ ] flutter analyzeが警告0件
 - [ ] テストを追加
+- [ ] ネイティブプラグイン使用時: `flutter build apk --debug` 成功
+- [ ] iOS: `pod install` → `flutter build ios --debug` 成功
 
 ## スキル参照
-詳細な実装ガイドは `skills/flutter-development/SKILL.md` を参照
+- `skills/ai-flutter-guidelines/SKILL.md` - 禁止事項・ベストプラクティス（必須）
+- `skills/flutter-development/SKILL.md` - 実装ガイド
+- `skills/flutter-environment-check/SKILL.md` - 環境診断（ネイティブプラグイン導入時）

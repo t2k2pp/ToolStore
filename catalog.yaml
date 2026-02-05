@@ -201,6 +201,13 @@ domains:
           name: "レビュー→リリースフロー"
           path: "domains/mobile/flutter/workflows/review-release.md"
 
+      checklists:
+        - id: build-troubleshooting
+          name: "ビルドトラブルシューティング"
+          path: "domains/mobile/flutter/checklists/build-troubleshooting.md"
+          description: "ビルドエラー→解決策マッピング、クイックフィックス集"
+          tags: [troubleshooting, build, error, debug]
+
     swift:
       name: "Swift"
       description: "iOS/macOSネイティブ開発（将来実装予定）"

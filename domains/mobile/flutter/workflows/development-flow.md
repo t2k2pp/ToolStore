@@ -11,6 +11,8 @@ Phase 1: DESIGN (mobile-architect + uiux-designer)
     ↓
 Phase 2: SECURITY_REVIEW (security-expert)
     ↓
+Phase 2.5: ENVIRONMENT_CHECK ← ネイティブプラグイン使用時
+    ↓
 Phase 3: IMPLEMENT (flutter-developer)
     ↓
 Phase 4: TEST (flutter-tdd-runner)
@@ -59,18 +61,40 @@ Phase 7: RELEASE
 
 ---
 
+## Phase 2.5: 環境チェック（ネイティブプラグイン使用時）
+
+### 参照スキル
+- `flutter-environment-check`
+
+### 実行条件
+- ネイティブプラグイン（health, camera, geolocator等）を導入する場合
+
+### チェック項目
+- [ ] `flutter doctor -v` で全項目パス
+- [ ] パッケージのREADME/Changelogで要件確認
+- [ ] minSdk/NDK/Kotlin要件を確認
+- [ ] iOS: Deployment Target/Swift/CocoaPods確認
+
+---
+
 ## Phase 3: 実装
 
 ### 実行エージェント
 - `flutter-developer`
+
+### 参照スキル
+- `ai-flutter-guidelines`（必須）
+- `flutter-development`
 
 ### 成果物
 - `lib/features/[feature]/` - 機能コード
 
 ### 完了条件
 - [ ] 設計書に基づき実装完了
-- [ ] `flutter analyze` がエラーなし
+- [ ] `flutter analyze` がエラー・警告なし
 - [ ] コードフォーマット適用済み
+- [ ] ネイティブプラグイン使用時: `flutter build apk --debug` 成功
+- [ ] iOS: `pod install` → `flutter build ios --debug` 成功
 
 ---
 

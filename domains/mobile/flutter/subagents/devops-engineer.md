@@ -75,4 +75,18 @@ jobs:
 ```
 
 ## スキル参照
-詳細は `skills/flutter-ci-cd/SKILL.md` を参照
+- `skills/flutter-ci-cd/SKILL.md` - CI/CDガイド
+- `skills/flutter-environment-check/SKILL.md` - 環境診断
+
+## 追加責務
+
+### ビルド検証の必須化
+CIパイプラインには以下を必ず含める:
+- `flutter build apk --debug` (Android)
+- `flutter build ios --debug --no-codesign` (iOS)
+- `flutter analyze` だけでなく実際のビルドを検証
+
+### 環境マトリクス確認
+- AGP/Gradle/Kotlin互換性
+- NDK/SDK要件
+- CocoaPods/Xcode互換性
