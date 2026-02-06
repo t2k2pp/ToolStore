@@ -208,6 +208,82 @@ domains:
           description: "ビルドエラー→解決策マッピング、クイックフィックス集"
           tags: [troubleshooting, build, error, debug]
 
+    expo:
+      name: "Expo"
+      description: "React Native + Expoマネージドワークフロー（OTA更新、EAS Build対応）"
+      path: "domains/mobile/expo"
+      
+      skills:
+        - id: expo-guidelines
+          name: "Expo AI開発ガイドライン"
+          path: "domains/mobile/expo/skills/expo-guidelines"
+          description: "AI駆動Expo開発の禁止事項、よくある問題と対策"
+          tags: [ai, guidelines, expo, must-read]
+          required: true
+          
+        - id: expo-development
+          name: "Expo開発"
+          path: "domains/mobile/expo/skills/expo-development"
+          description: "Expo Router、Zustand状態管理、EAS Build/Update"
+          tags: [expo, router, zustand, eas]
+          dependencies: [expo-guidelines]
+          
+        - id: expo-environment-check
+          name: "Expo環境診断"
+          path: "domains/mobile/expo/skills/expo-environment-check"
+          description: "Node.js、Expo CLI、EAS CLI確認、SDK互換性チェック"
+          tags: [environment, sdk, eas, setup]
+          
+      subagents:
+        - id: expo-developer
+          name: "Expo製造者"
+          path: "domains/mobile/expo/subagents/expo-developer.md"
+          description: "Expo Router、Zustand、NativeWind実装"
+          model: sonnet
+          
+      workflows:
+        - id: expo-development-flow
+          name: "Expo開発フロー"
+          path: "domains/mobile/expo/workflows/development-flow.md"
+
+    react-native:
+      name: "React Native CLI"
+      description: "React Native CLIベアワークフロー（ネイティブモジュール直接制御）"
+      path: "domains/mobile/react-native"
+      
+      skills:
+        - id: rn-guidelines
+          name: "React Native AI開発ガイドライン"
+          path: "domains/mobile/react-native/skills/rn-guidelines"
+          description: "AI駆動RN開発の禁止事項、ネイティブ連携の注意点"
+          tags: [ai, guidelines, react-native, must-read]
+          required: true
+          
+        - id: rn-development
+          name: "React Native開発"
+          path: "domains/mobile/react-native/skills/rn-development"
+          description: "ネイティブモジュール連携、React Navigation、状態管理"
+          tags: [react-native, native-modules, navigation]
+          dependencies: [rn-guidelines]
+          
+        - id: rn-environment-check
+          name: "React Native環境診断"
+          path: "domains/mobile/react-native/skills/rn-environment-check"
+          description: "Node.js、Xcode、Android Studio、CocoaPods確認"
+          tags: [environment, xcode, android-studio, setup]
+          
+      subagents:
+        - id: rn-developer
+          name: "React Native製造者"
+          path: "domains/mobile/react-native/subagents/rn-developer.md"
+          description: "ネイティブモジュール連携、React Navigation実装"
+          model: sonnet
+          
+      workflows:
+        - id: rn-development-flow
+          name: "React Native開発フロー"
+          path: "domains/mobile/react-native/workflows/development-flow.md"
+
     swift:
       name: "Swift"
       description: "iOS/macOSネイティブ開発（将来実装予定）"
@@ -239,6 +315,13 @@ domains:
         description: "AI駆動開発の禁止事項、よくある問題と対策"
         tags: [ai, guidelines, best-practices, must-read]
         required: true
+        
+      - id: tech-stack-selector
+        name: "技術スタック選定"
+        path: "domains/common/skills/tech-stack-selector"
+        description: "プラットフォーム（Mobile/Web/Desktop）とフレームワークを選定。ユーザー要望から最適な技術スタックを提案"
+        tags: [selection, platform, framework, architecture]
+        use_when: "フレームワークが明示されていない場合"
 
 # =============================================================================
 # MCP定義
@@ -282,11 +365,33 @@ mcps:
 # 推奨マッピング
 # =============================================================================
 recommendations:
-  - keywords: [flutter, dart, mobile, クロスプラットフォーム, モバイルアプリ]
+  # フレームワーク未指定時 → 技術スタック選定
+  - keywords: [モバイルアプリ, アプリ作成, アプリ開発, スマホアプリ, ios/android]
+    condition: "フレームワーク明示なし"
+    suggest:
+      common: [tech-stack-selector]
+      note: "フレームワーク選定後に適切なスキルを取得"
+
+  # Flutter指定時
+  - keywords: [flutter, dart, クロスプラットフォーム]
     suggest:
       skills: [flutter-development, flutter-tdd, mobile-app-design, mobile-app-uiux]
       subagents: [flutter-developer, mobile-architect, flutter-tdd-runner]
       common: [ai-flutter-guidelines]
+      
+  # Expo指定時
+  - keywords: [expo, react native expo, expo router, eas]
+    suggest:
+      skills: [expo-development, expo-environment-check]
+      subagents: [expo-developer]
+      common: [expo-guidelines]
+      
+  # React Native CLI指定時
+  - keywords: [react native, react-native, rn, bare workflow]
+    suggest:
+      skills: [rn-development, rn-environment-check]
+      subagents: [rn-developer]
+      common: [rn-guidelines]
       
   - keywords: [ios, iphone, ipad, app store, apple]
     suggest:
